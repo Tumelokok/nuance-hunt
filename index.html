@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f0e8" />
+    <meta name="description" content="Compare AI responses across languages with human review." />
+    <title>Nuance Hunt — Language comparison lab</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Nuance Hunt home">
+        <span class="brand-mark" aria-hidden="true">N∕E</span>
+        <span>NUANCE HUNT</span>
+      </a>
+      <span class="github-link">Open-source prototype</span>
+    </header>
+
+    <main id="top" class="page-shell">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-dot"></span> HUMAN-REVIEWED MODEL COMPARISONS</p>
+          <h1 id="hero-title">Can you catch<br /><em>what AI missed?</em></h1>
+          <p class="hero-description">Hunt for the meaning that gets lost when AI crosses languages. Compare answers, add a fluent speaker’s perspective, and make each discovery reproducible.</p>
+          <a class="hero-cta" href="#new-evaluation">Start a comparison <span aria-hidden="true">↓</span></a>
+        </div>
+        <div class="hero-art" aria-label="Two language paths meeting at a shared meaning">
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="orbit orbit-three"></div>
+          <div class="art-dot dot-one"></div>
+          <div class="art-dot dot-two"></div>
+          <div class="art-dot dot-three"></div>
+          <div class="art-center"><span>meaning</span><b>≋</b><span>meaning</span></div>
+          <span class="art-label label-top">same intent</span>
+          <span class="art-label label-bottom">two paths</span>
+        </div>
+      </section>
+
+      <aside class="notice" role="note">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <p><strong>Early prototype.</strong> Ratings are human notes, not a universal model score. Keep private or identifying material out of test cards. Everything stays in this browser until you export it.</p>
+      </aside>
+
+      <section class="lab-grid" aria-label="Evaluation workspace">
+        <div class="form-column">
+          <div class="section-heading" id="new-evaluation">
+            <div><p class="eyebrow">01 / BUILD A TEST CARD</p><h2>Set up a comparison</h2></div>
+            <span class="step-pill">LOCAL ONLY</span>
+          </div>
+
+          <form id="evaluation-form">
+            <div class="field-group">
+              <label for="task-title">What are we testing?</label>
+              <input id="task-title" name="taskTitle" required maxlength="120" placeholder="e.g. Explain a public transport change" />
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="task-type">Task type</label>
+                <select id="task-type" name="taskType">
+                  <option value="question-answering">Question answering</option>
+                  <option value="translation">Translation</option>
+                  <option value="summarization">Summarization</option>
+                  <option value="instruction-following">Instruction following</option>
+                  <option value="code-switching">Code-switching</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label for="prompt-relationship">Prompt relationship</label>
+                <select id="prompt-relationship" name="promptRelationship">
+                  <option value="translation">Direct translation</option>
+                  <option value="adaptation">Cultural or regional adaptation</option>
+                  <option value="independent">Independently written equivalent</option>
+                </select>
+              </div>
+            </div>
+            <div class="field-group">
+              <label for="prompt-note">Prompt relationship notes <span class="optional">optional</span></label>
+              <input id="prompt-note" name="promptNote" maxlength="500" placeholder="How was the second prompt translated or adapted?" />
+            </div>
+            <div class="field-group">
+              <label for="review-variety">Language variety / dialect reviewed in comparison <span class="optional">optional</span></label>
+              <input id="review-variety" name="reviewVariety" maxlength="80" placeholder="Name the variety if known" />
+            </div>
+
+            <div class="compare-labels" aria-hidden="true">
+              <span>BASELINE</span><span>LANGUAGE COMPARISON</span>
+            </div>
+            <div class="paired-panels">
+              <section class="language-panel" aria-labelledby="left-panel-title">
+                <div class="panel-heading"><span class="panel-index">A</span><h3 id="left-panel-title">Baseline</h3></div>
+                <div class="field-group">
+                  <label for="language-a">Language</label>
+                  <input id="language-a" name="languageA" required maxlength="80" placeholder="e.g. English" />
+                </div>
+                <div class="field-group">
+                  <label for="prompt-a">Prompt</label>
+                  <textarea id="prompt-a" name="promptA" required rows="4" maxlength="4000" placeholder="Write the first version of the task…"></textarea>
+                </div>
+                <div class="field-group">
+                  <label for="model-a">Model and version</label>
+                  <input id="model-a" name="modelA" required maxlength="120" placeholder="Use the same model for a fair test" />
+                </div>
+                <div class="field-group">
+                  <label for="settings-a">Generation settings <span class="optional">optional</span></label>
+                  <input id="settings-a" name="settingsA" maxlength="240" placeholder="Temperature, system prompt, or defaults" />
+                </div>
+                <div class="field-group">
+                  <label for="response-a">Model response</label>
+                  <textarea id="response-a" name="responseA" required rows="5" maxlength="10000" placeholder="Paste the response here…"></textarea>
+                </div>
+              </section>
+
+              <section class="language-panel panel-b" aria-labelledby="right-panel-title">
+                <div class="panel-heading"><span class="panel-index">B</span><h3 id="right-panel-title">Comparison</h3></div>
+                <div class="field-group">
+                  <label for="language-b">Language</label>
+                  <input id="language-b" name="languageB" required maxlength="80" placeholder="e.g. isiZulu" />
+                </div>
+                <div class="field-group">
+                  <label for="prompt-b">Prompt</label>
+                  <textarea id="prompt-b" name="promptB" required rows="4" maxlength="4000" placeholder="Translate or adapt the task. Note which you chose."></textarea>
+                </div>
+                <div class="field-group">
+                  <label for="model-b">Model and version</label>
+                  <input id="model-b" name="modelB" required maxlength="120" placeholder="Same model and settings recommended" />
+                </div>
+                <div class="field-group">
+                  <label for="settings-b">Generation settings <span class="optional">optional</span></label>
+                  <input id="settings-b" name="settingsB" maxlength="240" placeholder="Temperature, system prompt, or defaults" />
+                </div>
+                <div class="field-group">
+                  <label for="response-b">Model response</label>
+                  <textarea id="response-b" name="responseB" required rows="5" maxlength="10000" placeholder="Paste the response here…"></textarea>
+                </div>
+              </section>
+            </div>
+
+            <div class="field-group source-field">
+              <label for="evidence">Reference or source <span class="optional">optional</span></label>
+              <input id="evidence" name="evidence" type="url" maxlength="1000" placeholder="Link to a source that helps a reviewer assess the answer" />
+              <small>A source can help with fact checking. It does not replace a fluent speaker’s review.</small>
+            </div>
+
+            <fieldset class="review-fieldset">
+              <legend>Human review</legend>
+              <p class="fieldset-intro">Rate each response from 1 (needs work) to 5 (strong). Leave a rating blank if you cannot judge that dimension.</p>
+              <div class="rating-grid">
+                <div class="rating-labels"><span>Review dimension</span><span>Baseline</span><span>Comparison</span></div>
+                <div class="rating-row">
+                  <label for="meaning-a">Meaning preserved</label>
+                  <select id="meaning-a" name="meaningA"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+                  <select id="meaning-b" name="meaningB" aria-label="Comparison meaning preserved rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+                </div>
+                <div class="rating-row">
+                  <label for="accuracy-a">Factual accuracy</label>
+                  <select id="accuracy-a" name="accuracyA"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+                  <select id="accuracy-b" name="accuracyB" aria-label="Comparison factual accuracy rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+                </div>
+                <div class="rating-row">
+                  <label for="naturalness-a">Naturalness</label>
+                  <select id="naturalness-a" name="naturalnessA"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+                  <select id="naturalness-b" name="naturalnessB" aria-label="Comparison naturalness rating"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+                </div>
+              </div>
+              <div class="field-group reviewer-note">
+                <label for="review-note">What should a reader know about this review? <span class="optional">optional</span></label>
+                <textarea id="review-note" name="reviewNote" rows="3" maxlength="2000" placeholder="For example: I speak this variety at home; this phrase sounds overly formal…"></textarea>
+              </div>
+            </fieldset>
+
+            <div class="form-actions">
+              <button class="button-primary" type="submit">Save comparison <span aria-hidden="true">↗</span></button>
+              <button class="button-quiet" id="clear-form" type="button">Clear form</button>
+              <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+            </div>
+          </form>
+        </div>
+
+        <aside class="side-column">
+          <section class="guide-card">
+            <p class="eyebrow">A FAIRER TEST</p>
+            <h2>Keep the task steady.</h2>
+            <ol>
+              <li><span>1</span><p>Use the same model and generation settings for both prompts when you can.</p></li>
+              <li><span>2</span><p>Say whether the second prompt is a translation or a cultural adaptation.</p></li>
+              <li><span>3</span><p>Ask a fluent speaker to review the response in that language.</p></li>
+            </ol>
+            <p class="guide-footnote">A single comparison is a useful observation, not proof of overall language quality.</p>
+          </section>
+
+          <section class="saved-section" aria-labelledby="saved-title">
+            <div class="saved-heading">
+              <div><p class="eyebrow">02 / YOUR BROWSER</p><h2 id="saved-title">Saved comparisons <span id="saved-count" class="count-badge">0</span></h2></div>
+              <div class="saved-actions">
+                <button id="export-all" class="icon-button" type="button" title="Export all comparisons as JSON" aria-label="Export all comparisons as JSON">↓</button>
+                <button id="delete-all" class="icon-button danger" type="button" title="Delete all saved comparisons" aria-label="Delete all saved comparisons">×</button>
+              </div>
+            </div>
+            <div id="saved-list" class="saved-list" aria-live="polite"></div>
+            <p class="storage-note">Saved in this browser only. Exported files include the prompts and responses you entered.</p>
+          </section>
+        </aside>
+      </section>
+
+      <footer class="footer">
+        <span>NUANCE HUNT <span aria-hidden="true">·</span> AN OPEN EVALUATION WORKBENCH</span>
+        <a href="docs/research-notes.md">Research notes</a>
+      </footer>
+    </main>
+  </body>
+</html>

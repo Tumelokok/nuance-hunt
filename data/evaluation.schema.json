@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:nuance-hunt:evaluation:v1",
+  "title": "Nuance Hunt evaluation export",
+  "type": "object",
+  "required": ["schemaVersion", "evaluations"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "exportedAt": { "type": "string", "format": "date-time" },
+    "notice": { "type": "string" },
+    "evaluations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evaluation" }
+    }
+  },
+  "$defs": {
+    "rating": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 5
+    },
+    "pairEntry": {
+      "type": "object",
+      "required": ["language", "prompt", "model", "response", "ratings"],
+      "properties": {
+        "language": { "type": "string", "minLength": 1 },
+        "prompt": { "type": "string", "minLength": 1 },
+        "model": { "type": "string", "minLength": 1 },
+        "generationSettings": { "type": "string" },
+        "response": { "type": "string", "minLength": 1 },
+        "ratings": {
+          "type": "object",
+          "required": ["meaningPreserved", "factualAccuracy", "naturalness"],
+          "properties": {
+            "meaningPreserved": { "$ref": "#/$defs/rating" },
+            "factualAccuracy": { "$ref": "#/$defs/rating" },
+            "naturalness": { "$ref": "#/$defs/rating" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "evaluation": {
+      "type": "object",
+      "required": ["id", "createdAt", "task", "pair"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "task": {
+          "type": "object",
+          "required": ["title", "type"],
+          "properties": {
+            "title": { "type": "string", "minLength": 1 },
+            "type": { "type": "string", "minLength": 1 },
+            "promptRelationship": { "enum": ["translation", "adaptation", "independent"] },
+            "promptNote": { "type": "string" },
+            "languageVariety": { "type": "string" },
+            "evidenceUrl": { "type": "string", "format": "uri" },
+            "reviewerNote": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "pair": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": { "$ref": "#/$defs/pairEntry" }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
